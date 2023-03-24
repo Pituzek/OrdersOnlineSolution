@@ -3,11 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersOnline.Web", "OrdersOnline.Web\OrdersOnline.Web.csproj", "{F4684F79-4DD4-49C6-AA7A-EC06AD864BFD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersOnline.Web", "OrdersOnline.Web\OrdersOnline.Web.csproj", "{F4684F79-4DD4-49C6-AA7A-EC06AD864BFD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersOnline.Api", "OrdersOnline.Api\OrdersOnline.Api.csproj", "{2C44C414-A33A-4331-AC2E-096CDF923731}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersOnline.Api", "OrdersOnline.Api\OrdersOnline.Api.csproj", "{2C44C414-A33A-4331-AC2E-096CDF923731}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrdersOnline.Models", "OrdersOnline.Models\OrdersOnline.Models.csproj", "{0FA8C540-B40F-40D1-8A08-9CB2ECFA9EED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdersOnline.Models", "OrdersOnline.Models\OrdersOnline.Models.csproj", "{0FA8C540-B40F-40D1-8A08-9CB2ECFA9EED}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
