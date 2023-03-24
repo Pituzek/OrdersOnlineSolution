@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using OrdersOnline.Api.Entities;
 using OrdersOnline.Api.Extensions;
 using OrdersOnline.Api.Repositories.Contracts;
 using OrdersOnline.Models.Dto;
+using System.Linq;
 using System.Reflection.Metadata.Ecma335;
 
 namespace OrdersOnline.Api.Controllers
@@ -24,7 +26,7 @@ namespace OrdersOnline.Api.Controllers
             try
             {
                 var orders = await _orderRepository.GetAllOrdersAsync();
-                var orderLines = orders.Select(o => o.OrderLines);
+                var orderLines = orders.SelectMany(o => o.OrderLines);
 
                 if (orders == null)
                 {
@@ -32,7 +34,7 @@ namespace OrdersOnline.Api.Controllers
                 }
                 else
                 {
-                    var ordersDtos = orders.ConvertToDto((IEnumerable<Entities.OrderLine>)orderLines);
+                    var ordersDtos = orders.ConvertToDto(orderLines.ToList());
 
                     return Ok(ordersDtos);
                 }
