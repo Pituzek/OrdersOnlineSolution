@@ -11,6 +11,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddDbContextPool<OrdersOnlineDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("OrdersOnlineConnection")));
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -27,7 +28,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors(policy =>
-    policy.WithOrigins("http://localhost:7110/", "https://localhost:7110/")
+    policy.WithOrigins("http://localhost:7110", "https://localhost:7110")
     .AllowAnyMethod()
     .WithHeaders(HeaderNames.ContentType)
     );

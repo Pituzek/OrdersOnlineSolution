@@ -1,0 +1,57 @@
+﻿@page "/"
+@inherits OrderBase
+
+<h3 class="mb-5">Orders</h3>
+
+@if (Orders == null)
+{
+    <h3>Loading...</h3>
+}
+else
+{
+    var orderCount = Orders.Count();
+
+    if (orderCount > 0)
+    {
+        @foreach (var order in Orders)
+        {
+        <div class="col-md-12 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">
+                       @order.CreateDate Status: @order.Status
+                       Order ID: @order.Id
+                    </h5>
+                    <p class="card-text">
+                        <b>Client name: @order.ClientName</b>
+                    </p>
+                    <p class="card-text">
+                        <b>Total price: @order.OrderPrice.ToString("C")</b>
+                    </p>
+                    <p class="card-text">
+                        <b>Additional information: @order.AdditionalInfo</b>
+                    </p>
+                </div>
+                <div class="row">
+                    @foreach (var items in order.OrderLines)
+                        {
+                            <div class="row">
+                                <div class="col mb-4">
+                                    <b>@items.Id</b>
+                                </div>
+                                <div class="col mb-4">
+                                    <b>Product: @items.Product</b>
+                                </div>
+                                <div class="col mb-4">
+                                    <b>Price: @items.Price.ToString("C")</b>
+                                </div>
+                            </div>
+                        }
+                </div>
+            </div>
+        </div>
+        }
+    }
+}
+
+
