@@ -13,7 +13,7 @@ namespace OrdersOnline.Web.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            Orders = await OrderService.GetItems();
+            Orders = await OrderService.GetOrders();
         }
     }
 }

@@ -2,6 +2,7 @@
 using OrdersOnline.Api.Data;
 using OrdersOnline.Api.Entities;
 using OrdersOnline.Api.Repositories.Contracts;
+using OrdersOnline.Models.Dto;
 
 namespace OrdersOnline.Api.Repositories
 {
@@ -14,9 +15,40 @@ namespace OrdersOnline.Api.Repositories
             _ordersOnlineDbContext = ordersOnlineDbContext;
         }
 
-        public Task AddOrderAsync(Order order)
+        private async Task<bool> OrderLineExist(int orderId, int orderLineId)
         {
-            throw new NotImplementedException();
+            return await _ordersOnlineDbContext.OrderLines.AnyAsync(c => c.OrderId == orderId && 
+                                                                    c.OrderLineId == orderLineId);
+        }
+
+        public async Task<Order> AddOrderAsync(OrderDTO orderDTO)
+        {
+            if (await OrderLineExist(orderDTO.Id, orderDTO.OrderLines.First().Id) == false )
+            {
+                var newOrder = new Order()
+                {
+                    OrderPrice = orderDTO.OrderLines.Sum(s => s.Price),
+                    AdditionalInfo = orderDTO.AdditionalInfo,
+                    ClientName = orderDTO.ClientName,
+                    CreateDate = orderDTO.CreateDate,
+                    Status = (Entities.OrderStatus)orderDTO.Status,
+                    OrderLines = orderDTO.OrderLines.Select(ol => new OrderLine()
+                    {
+                        Product = ol.Product,
+                        Price = ol.Price,
+                        OrderId = orderDTO.Id
+                    }).ToList()
+                };
+
+                if (newOrder != null)
+                {
+                    var result = await _ordersOnlineDbContext.Order.AddAsync(newOrder);
+                    await _ordersOnlineDbContext.SaveChangesAsync();
+                    return result.Entity;
+                }
+            }
+
+            return null;
         }
 
         public Task DeleteOrderAsync(Order order)

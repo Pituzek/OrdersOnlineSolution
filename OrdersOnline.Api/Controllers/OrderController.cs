@@ -45,5 +45,40 @@ namespace OrdersOnline.Api.Controllers
                 
             }
         }
+
+        [HttpPost]
+        public async Task<ActionResult<OrderDTO>> PostOrder([FromBody] OrderDTO orderDTO)
+        {
+            try
+            {
+                var newOrder = await _orderRepository.AddOrderAsync(orderDTO);
+
+                if (newOrder == null)
+                {
+                    return NoContent();
+                }
+
+                var newOrderLines = orderDTO.OrderLines.Select(ol => new OrderLine()
+                {
+                    Product = ol.Product,
+                    Price = ol.Price
+                }).ToList();
+
+                foreach (var orderLine in newOrderLines)
+                {
+                    newOrder.OrderLines.Add(orderLine);
+                }
+
+                var newOrderDTO = newOrder.ConvertToDto(newOrder);
+
+                return Ok(newOrderDTO);
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

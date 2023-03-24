@@ -1,4 +1,5 @@
 ﻿using OrdersOnline.Api.Entities;
+using OrdersOnline.Models.Dto;
 
 namespace OrdersOnline.Api.Repositories.Contracts
 {
@@ -6,7 +7,7 @@ namespace OrdersOnline.Api.Repositories.Contracts
     {
         Task<IEnumerable<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
-        Task AddOrderAsync(Order order);
+        Task<Order> AddOrderAsync(OrderDTO order);
         Task UpdateOrderAsync(Order order);
         Task DeleteOrderAsync(Order order);
     }
