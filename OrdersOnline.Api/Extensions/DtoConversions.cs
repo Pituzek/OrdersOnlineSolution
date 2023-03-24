@@ -12,6 +12,21 @@ namespace OrdersOnline.Api.Extensions
         public static IEnumerable<OrderDTO> ConvertToDto(this IEnumerable<Order> orders,
                                                               IEnumerable<OrderLine> orderLines)
         {
+
+            //return (from order in orders
+            //        join orderLine in orderLines
+            //        on order.OrderId equals orderLine.OrderId
+            //        select new OrderDTO
+            //        {
+            //            Id = order.OrderId,
+            //            CreateDate = order.CreateDate,
+            //            ClientName = order.ClientName,
+            //            OrderPrice = order.OrderPrice,
+            //            AdditionalInfo = order.AdditionalInfo,
+            //            OrderLines = orderLine.Order.OrderLines.ToList(),
+            //        }).ToList();
+
+
             var orderLinesByOrderId = orderLines.GroupBy(ol => ol.OrderId);
 
             return (from order in orders
@@ -26,11 +41,10 @@ namespace OrdersOnline.Api.Extensions
                         AdditionalInfo = order.AdditionalInfo,
                         OrderLines = orderLinesGroup.Select(ol => new OrderLineDTO
                         {
-                            Id = ol.OrderLineId,
                             Product = ol.Product,
                             Price = ol.Price
                         }).ToList()
-                    });
+                    }).ToList();
         }
     }
 }

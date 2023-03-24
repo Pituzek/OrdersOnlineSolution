@@ -26,8 +26,8 @@ namespace OrdersOnline.Api.Repositories
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()
         {
+            //throw new NotImplementedException();
             var orders = await _ordersOnlineDbContext.Order
-                                                     .Include(o => o.OrderLines)
                                                      .ToListAsync();
             return orders;
         }
