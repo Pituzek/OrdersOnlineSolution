@@ -80,5 +80,24 @@ namespace OrdersOnline.Api.Controllers
                 throw;
             }
         }
+
+        [HttpDelete("{id:int}")]
+        public async Task<ActionResult> DeleteOrder(int id)
+        {
+            try
+            {
+
+                await _orderRepository.DeleteOrderAsync(id);
+
+                return Ok();
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
     }
 }

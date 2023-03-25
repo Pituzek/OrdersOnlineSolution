@@ -6,5 +6,6 @@ namespace OrdersOnline.Web.Services.Contracts
     {
         Task<IEnumerable<OrderDTO>> GetOrders();
         Task<OrderDTO> AddOrder(OrderDTO orderDTO);
+        Task<OrderDTO> DeleteOrder(OrderDTO orderDTO);
     }
 }

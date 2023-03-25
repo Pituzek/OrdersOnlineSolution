@@ -41,22 +41,8 @@
                 <button type="button" class="btn btn-primary" @onclick="AddOrderLine">Add Order Line</button>
             </div>
 
-            <!--<button type="submit" class="btn btn-success" @onclick="AddToOrders_Click(OrderDTO)">Create Order</button>-->
             <button @onclick="(() => AddToOrders_Click(OrderDTO))" class="btn btn-success" type="submit">Create Order</button>
         </form>
     </div>
 
 </EditForm>
-
-@code {
-    private int values = 0;
-    private void AddValue() => values++;
-
-    public async Task HandleValidSubmit()
-    {
-        //Logger.LogInformation("HandleValidSubmit called");
-
-        // Process the valid form
-        await Task.CompletedTask;
-    }
-}

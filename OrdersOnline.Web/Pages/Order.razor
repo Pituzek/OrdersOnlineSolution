@@ -25,8 +25,13 @@ else
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title mb-3">
-                       @order.CreateDate Status: @order.Status
-                       Order ID: @order.Id
+                       @order.CreateDate 
+                    </h5>
+                    <h5 class="card-title mb-3">
+                        Status: @order.Status
+                    </h5>
+                    <h5 class="card-title mb-3">
+                        Order ID: @order.Id
                     </h5>
                     <p class="card-text">
                         <b>Client name: @order.ClientName</b>
@@ -38,21 +43,24 @@ else
                         <b>Additional information: @order.AdditionalInfo</b>
                     </p>
                 </div>
-                <div class="row">
+                    <div class="container row">
                     @foreach (var items in order.OrderLines)
                         {
-                            <div class="row">
-                                <div class="col mb-4">
+                            <div class="row mr-4 ml-4 mt-2 mb-2">
+                                <div class="col-sm-1 mr-4 ml-4 mt-2 mb-2">
                                     <b>@items.Id</b>
                                 </div>
-                                <div class="col mb-4">
+                                <div class="col mr-4 ml-4 mt-2 mb-2">
                                     <b>Product: @items.Product</b>
                                 </div>
-                                <div class="col mb-4">
+                                <div class="col mr-4 ml-4 mt-2 mb-2">
                                     <b>Price: @items.Price.ToString("C")</b>
                                 </div>
                             </div>
                         }
+                </div>
+                <div>
+                        <button type="button" class="btn btn-primary" @onclick="@(() => DeleteOrder(order) )">Delete this Order</button>
                 </div>
             </div>
         </div>

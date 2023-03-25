@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using OrdersOnline.Api.Data;
 using OrdersOnline.Api.Entities;
 using OrdersOnline.Api.Repositories.Contracts;
@@ -31,7 +32,7 @@ namespace OrdersOnline.Api.Repositories
                     AdditionalInfo = orderDTO.AdditionalInfo,
                     ClientName = orderDTO.ClientName,
                     CreateDate = orderDTO.CreateDate,
-                    Status = (Entities.OrderStatus)orderDTO.Status,
+                    Status = Entities.OrderStatus.New,
                     OrderLines = orderDTO.OrderLines.Select(ol => new OrderLine()
                     {
                         Product = ol.Product,
@@ -51,9 +52,16 @@ namespace OrdersOnline.Api.Repositories
             return null;
         }
 
-        public Task DeleteOrderAsync(Order order)
+        public async Task DeleteOrderAsync(int id)
         {
-            throw new NotImplementedException();
+            var item = await _ordersOnlineDbContext.Order.FindAsync(id);
+
+            if (item != null)
+            {
+                _ordersOnlineDbContext.Order.Remove(item);
+                await _ordersOnlineDbContext.SaveChangesAsync();
+            }
+
         }
 
         public async Task<IEnumerable<Order>> GetAllOrdersAsync()

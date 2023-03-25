@@ -62,6 +62,26 @@ namespace OrdersOnline.Web.Services
                     throw new Exception($"Http status: {response.StatusCode} Message-{message}");
                 }
             }
+            catch (Exception ex)
+            {
+                
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<OrderDTO> DeleteOrder(OrderDTO orderDTO)
+        {
+            try
+            {
+                var response = await _httpClient.DeleteAsync($"api/Order/{orderDTO.Id}");
+
+                if (response.IsSuccessStatusCode)
+                {
+                    return await response.Content.ReadFromJsonAsync<OrderDTO>();
+                }
+
+                return default(OrderDTO);
+            }
             catch (Exception)
             {
 

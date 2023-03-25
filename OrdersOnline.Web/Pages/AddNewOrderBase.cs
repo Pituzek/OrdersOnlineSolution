@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OrdersOnline.Models.Dto;
 using OrdersOnline.Web.Services.Contracts;
-using OrdersOnline.Web.Services;
 
 namespace OrdersOnline.Web.Pages
 {
@@ -25,14 +24,16 @@ namespace OrdersOnline.Web.Pages
         {
             try
             {
-                if (OrderDTO.AdditionalInfo == null || OrderDTO.AdditionalInfo == "") 
+                if (orderDTO.AdditionalInfo == null || orderDTO.AdditionalInfo == "") 
                 {
                     OrderDTO.AdditionalInfo = "N/A";
                 }
 
-                NavigationManager.NavigateTo("/");
+                //NavigationManager.NavigateTo("/"); 
+                //OrderDTO = await OrderService.AddOrder(OrderDTO);
 
-                OrderDTO = await OrderService.AddOrder(OrderDTO);
+                NavigationManager.NavigateTo("/");
+                await OrderService.AddOrder(orderDTO);
             }
             catch (Exception)
             {
@@ -47,9 +48,18 @@ namespace OrdersOnline.Web.Pages
             OrderDTO.OrderLines.Add(new OrderLineDTO());
             StateHasChanged();
         }
+
         public void RemoveOrderLine(int index)
         {
             OrderDTO.OrderLines.RemoveAt(index);
+        }
+
+        public async Task HandleValidSubmit()
+        {
+            //Logger.LogInformation("HandleValidSubmit called");
+
+            // Process the valid form
+            await Task.CompletedTask;
         }
     }
 }

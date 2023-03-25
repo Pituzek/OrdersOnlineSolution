@@ -15,5 +15,10 @@ namespace OrdersOnline.Web.Pages
         {
             Orders = await OrderService.GetOrders();
         }
+
+        public void DeleteOrder(OrderDTO order)
+        {
+            OrderService.DeleteOrder(order);
+        }
     }
 }

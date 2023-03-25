@@ -9,6 +9,6 @@ namespace OrdersOnline.Api.Repositories.Contracts
         Task<Order> GetOrderByIdAsync(int id);
         Task<Order> AddOrderAsync(OrderDTO order);
         Task UpdateOrderAsync(Order order);
-        Task DeleteOrderAsync(Order order);
+        Task DeleteOrderAsync(int id);
     }
 }
