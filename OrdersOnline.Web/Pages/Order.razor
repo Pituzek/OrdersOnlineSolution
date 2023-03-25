@@ -60,7 +60,7 @@ else
                         }
                 </div>
                 <div>
-                        <button type="button" class="btn btn-primary" @onclick="@(() => DeleteOrder(order) )">Delete this Order</button>
+                        <button type="button" class="btn btn-primary" @onclick="@(async () => await DeleteOrder(order) )">Delete this Order</button>
                 </div>
             </div>
         </div>

@@ -9,16 +9,22 @@ namespace OrdersOnline.Web.Pages
         [Inject]
         public IOrderService OrderService { get; set; }
 
-        public IEnumerable<OrderDTO> Orders { get; set; }
+        public List<OrderDTO>? Orders { get; set; }
 
         protected override async Task OnInitializedAsync()
         {
-            Orders = await OrderService.GetOrders();
+            Orders = (List<OrderDTO>)await OrderService.GetOrders();
         }
 
-        public void DeleteOrder(OrderDTO order)
+        public async Task DeleteOrder(OrderDTO order)
         {
-            OrderService.DeleteOrder(order);
+            Orders.RemoveAll(x => x.Id == order.Id);
+
+            await InvokeAsync(() =>
+            {
+                OrderService.DeleteOrder(order);
+                this.StateHasChanged();
+            });
         }
     }
 }
