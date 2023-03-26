@@ -8,7 +8,7 @@ namespace OrdersOnline.Api.Repositories.Contracts
         Task<IEnumerable<Order>> GetAllOrdersAsync();
         Task<Order> GetOrderByIdAsync(int id);
         Task<Order> AddOrderAsync(OrderDTO order);
-        Task UpdateOrderAsync(Order order);
+        Task<OrderDTO> UpdateOrderAsync(OrderDTO order, int id);
         Task DeleteOrderAsync(int id);
     }
 }

@@ -4,6 +4,9 @@ using OrdersOnline.Api.Data;
 using OrdersOnline.Api.Entities;
 using OrdersOnline.Api.Repositories.Contracts;
 using OrdersOnline.Models.Dto;
+using System.Net.Http;
+using System.Text.Json;
+using System.Text;
 
 namespace OrdersOnline.Api.Repositories
 {
@@ -72,14 +75,43 @@ namespace OrdersOnline.Api.Repositories
             return orders;
         }
 
-        public Task<Order> GetOrderByIdAsync(int id)
+        public async Task<Order> GetOrderByIdAsync(int id)
         {
-            throw new NotImplementedException();
+            var order = await _ordersOnlineDbContext.Order
+                                                    .Include(o => o.OrderLines)
+                                                    .FirstOrDefaultAsync(o => o.OrderId == id);
+            return order;
         }
 
-        public Task UpdateOrderAsync(Order order)
+        public async Task<OrderDTO> UpdateOrderAsync(OrderDTO orderDTO, int id)
         {
-            throw new NotImplementedException();
+            var orderToUpdate = await GetOrderByIdAsync(id);
+
+            if (orderToUpdate == null)
+            {
+                throw new ArgumentException($"Order with id {id} does not exist.");
+            }
+
+            orderToUpdate.ClientName = orderDTO.ClientName;
+            orderToUpdate.OrderPrice = orderDTO.OrderPrice;
+            orderToUpdate.Status = (Entities.OrderStatus)orderDTO.Status;
+            orderToUpdate.AdditionalInfo = orderDTO.AdditionalInfo;
+            orderToUpdate.OrderLines.Clear();
+
+            foreach (var orderLineDTO in orderDTO.OrderLines)
+            {
+                var orderLine = new OrderLine
+                {
+                    Product = orderLineDTO.Product,
+                    Price = orderLineDTO.Price
+                };
+                orderToUpdate.OrderLines.Add(orderLine);
+            }
+
+            _ordersOnlineDbContext.Order.Update(orderToUpdate);
+            await _ordersOnlineDbContext.SaveChangesAsync();
+
+            return orderDTO;
         }
     }
 }

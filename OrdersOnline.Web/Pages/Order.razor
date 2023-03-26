@@ -5,7 +5,7 @@
 <h3 class="mb-5">Orders</h3>
 
 <div>
-    <button type="button" class="btn btn-primary mb-4" @onclick="@( async () => _nav.NavigateTo("/addneworder"))">Add new order</button>
+    <button type="button" class="btn btn-primary btn-lg btn-block mb-4" @onclick="@( async () => _nav.NavigateTo("/addneworder"))">Add new order</button>
 </div>
 
 @if (Orders == null)
@@ -61,7 +61,11 @@ else
                 </div>
 
                 <div>
-                        <button type="button" class="btn btn-primary" @onclick="@(async () => await DeleteOrder(order) )">Delete this Order</button>
+                    <button type="button" class="btn btn-success btn-sm" @onclick="@(async () => _nav.NavigateTo($"/updateorder/{order.Id}"))">Update this Order</button>
+                    <button type="button" class="btn btn-danger btn-sm" @onclick="@(async () => await DeleteOrder(order) )">Delete this Order</button>
+                </div>
+                <div>
+
                 </div>
             </div>
         }

@@ -20,8 +20,29 @@ namespace OrdersOnline.Api.Controllers
             _orderRepository = orderRepository;
         }
 
+        [HttpGet("{id:int}")]
+        public async Task<ActionResult<OrderDTO>> GetOrder(int id)
+        {
+            try
+            {
+                var order = await _orderRepository.GetOrderByIdAsync(id);
+
+                if (order == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(order);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders() 
+        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetOrders()
         {
             try
             {
@@ -42,7 +63,7 @@ namespace OrdersOnline.Api.Controllers
             catch (Exception)
             {
                 return StatusCode(StatusCodes.Status500InternalServerError, "Error retrieving data");
-                
+
             }
         }
 
@@ -91,6 +112,22 @@ namespace OrdersOnline.Api.Controllers
 
                 return Ok();
 
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        [HttpPut("{id:int}")]
+        public async Task<ActionResult> UpdateOrder(OrderDTO orderDTO, int id)
+        {
+            try
+            {
+                await _orderRepository.UpdateOrderAsync(orderDTO, id);
+
+                return Ok();
             }
             catch (Exception)
             {
