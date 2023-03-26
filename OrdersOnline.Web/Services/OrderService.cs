@@ -2,6 +2,7 @@
 using OrdersOnline.Models.Dto;
 using OrdersOnline.Web.Services.Contracts;
 using System.Net.Http.Json;
+using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
@@ -31,12 +32,11 @@ namespace OrdersOnline.Web.Services
 
                     var options = new JsonSerializerOptions
                     {
-                        ReferenceHandler = ReferenceHandler.Preserve
+                        ReferenceHandler = ReferenceHandler.Preserve,
+                        WriteIndented = true
                     };
 
-                    return await response.Content.ReadFromJsonAsync<OrderDTO>(options);
-                    //var json = await response.Content.ReadAsStringAsync();
-                    //return JsonConvert.DeserializeObject<OrderDTO>(json);
+                    return await response.Content.ReadFromJsonAsync<OrderDTO>();
                 }
                 else
                 {
@@ -133,14 +133,21 @@ namespace OrdersOnline.Web.Services
         {
             try
             {
-                var response = await _httpClient.PutAsJsonAsync("api/Orders/" + orderDTO.Id, orderDTO);
+                var jsonRequest = JsonConvert.SerializeObject(orderDTO);
+                var content = new StringContent(jsonRequest, Encoding.UTF8, "application/json-patch+json");
 
-                if (!response.IsSuccessStatusCode)
+                var id = orderDTO.Id.ToString();
+
+                var response = await _httpClient.PatchAsync($"api/Order/{id}", content);
+                response.EnsureSuccessStatusCode();
+
+                if (response.IsSuccessStatusCode)
                 {
-                    throw new HttpRequestException($"Failed to update order. Status code: {response.StatusCode}");
+                    return await response.Content.ReadFromJsonAsync<OrderDTO>();
                 }
 
-                return await response.Content.ReadFromJsonAsync<OrderDTO>();
+                return null;
+
             }
             catch (Exception)
             {

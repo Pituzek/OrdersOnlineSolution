@@ -1,5 +1,7 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using OrdersOnline.Api.Entities;
 using OrdersOnline.Api.Extensions;
 using OrdersOnline.Api.Repositories.Contracts;
@@ -25,18 +27,20 @@ namespace OrdersOnline.Api.Controllers
         {
             try
             {
-                var order = await _orderRepository.GetOrderByIdAsync(id);
+                var orderToUpdate = await _orderRepository.GetOrderByIdAsync(id);
 
-                if (order == null)
+                if (orderToUpdate != null)
+                {
+                    var order = orderToUpdate.ConvertToDto(orderToUpdate);
+                    return Ok(order);
+                }
+                else
                 {
                     return NotFound();
                 }
-
-                return Ok(order);
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -120,14 +124,14 @@ namespace OrdersOnline.Api.Controllers
             }
         }
 
-        [HttpPut("{id:int}")]
-        public async Task<ActionResult> UpdateOrder(OrderDTO orderDTO, int id)
+        [HttpPatch("{id:int}")]
+        public async Task<ActionResult<OrderDTO>> UpdateOrder( int id, [FromBody] OrderDTO orderDTO)
         {
             try
             {
-                await _orderRepository.UpdateOrderAsync(orderDTO, id);
+                var order = await _orderRepository.UpdateOrderAsync(orderDTO, id);
 
-                return Ok();
+                return Ok(order);
             }
             catch (Exception)
             {

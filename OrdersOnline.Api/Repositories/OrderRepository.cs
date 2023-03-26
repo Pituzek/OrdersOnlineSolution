@@ -85,33 +85,42 @@ namespace OrdersOnline.Api.Repositories
 
         public async Task<OrderDTO> UpdateOrderAsync(OrderDTO orderDTO, int id)
         {
-            var orderToUpdate = await GetOrderByIdAsync(id);
-
-            if (orderToUpdate == null)
+            try
             {
-                throw new ArgumentException($"Order with id {id} does not exist.");
-            }
+                var orderToUpdate = await GetOrderByIdAsync(id);
 
-            orderToUpdate.ClientName = orderDTO.ClientName;
-            orderToUpdate.OrderPrice = orderDTO.OrderPrice;
-            orderToUpdate.Status = (Entities.OrderStatus)orderDTO.Status;
-            orderToUpdate.AdditionalInfo = orderDTO.AdditionalInfo;
-            orderToUpdate.OrderLines.Clear();
-
-            foreach (var orderLineDTO in orderDTO.OrderLines)
-            {
-                var orderLine = new OrderLine
+                if (orderToUpdate == null)
                 {
-                    Product = orderLineDTO.Product,
-                    Price = orderLineDTO.Price
-                };
-                orderToUpdate.OrderLines.Add(orderLine);
+                    throw new ArgumentException($"Order with id {id} does not exist.");
+                }
+
+                orderToUpdate.ClientName = orderDTO.ClientName;
+                orderToUpdate.OrderPrice = orderDTO.OrderPrice;
+                orderToUpdate.Status = (Entities.OrderStatus)orderDTO.Status;
+                orderToUpdate.AdditionalInfo = orderDTO.AdditionalInfo;
+                orderToUpdate.OrderLines.Clear();
+
+                foreach (var orderLineDTO in orderDTO.OrderLines)
+                {
+                    var orderLine = new OrderLine
+                    {
+                        Product = orderLineDTO.Product,
+                        Price = orderLineDTO.Price
+                    };
+                    orderToUpdate.OrderLines.Add(orderLine);
+                }
+
+                _ordersOnlineDbContext.Order.Update(orderToUpdate);
+                await _ordersOnlineDbContext.SaveChangesAsync();
+
+                return orderDTO;
             }
+            catch (Exception ex)
+            {
 
-            _ordersOnlineDbContext.Order.Update(orderToUpdate);
-            await _ordersOnlineDbContext.SaveChangesAsync();
-
-            return orderDTO;
+                throw new Exception(ex.Message);
+            }
+           
         }
     }
 }

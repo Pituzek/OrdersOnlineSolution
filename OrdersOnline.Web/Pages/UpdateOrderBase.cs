@@ -21,9 +21,37 @@ namespace OrdersOnline.Web.Pages
 
         protected override async Task OnInitializedAsync()
         {
-            OrderDTO = new OrderDTO();
-            OrderDTO = await OrderService.GetOrder(Convert.ToInt32(id));
-            //OrderDTO.OrderLines = new List<OrderLineDTO>();
+            try
+            {
+                int orderId = Convert.ToInt32(id);
+                var order = await OrderService.GetOrder(orderId);
+
+                OrderDTO = new OrderDTO
+                {
+                    Id = order.Id,
+                    CreateDate = order.CreateDate,
+                    Status = order.Status,
+                    ClientName = order.ClientName,
+                    OrderPrice = order.OrderPrice,
+                    AdditionalInfo = order.AdditionalInfo,
+                    OrderLines = order.OrderLines.Select(ol => new OrderLineDTO
+                    {
+                        Id = ol.Id,
+                        Product = ol.Product,
+                        Price = ol.Price
+                    }).ToList()
+                };
+
+                if (OrderDTO == null)
+                {
+                    throw new Exception($"Order with id {orderId} not found.");
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
 
         public async Task UpdateOrders(OrderDTO orderDTO)

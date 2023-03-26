@@ -1,4 +1,6 @@
-﻿namespace OrdersOnline.Api.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace OrdersOnline.Api.Entities
 {
     public enum OrderStatus
     {
@@ -16,6 +18,8 @@
         public string? ClientName { get; set; }
         public decimal OrderPrice { get; set; }
         public string? AdditionalInfo { get; set; }
+
+        [JsonIgnore]
         public ICollection<OrderLine> OrderLines { get; set; }
     }
 }
