@@ -20,24 +20,22 @@ namespace OrdersOnline.Web.Pages
             OrderDTO.OrderLines = new List<OrderLineDTO>();
         }
 
-        protected async Task AddToOrders_Click(OrderDTO orderDTO)
+        public async Task AddToOrders_Click(OrderDTO orderDTO)
         {
             try
             {
-                if (orderDTO.AdditionalInfo == null || orderDTO.AdditionalInfo == "") 
+
+                if (orderDTO.AdditionalInfo == null || orderDTO.AdditionalInfo == "")
                 {
                     OrderDTO.AdditionalInfo = "N/A";
                 }
 
-                //NavigationManager.NavigateTo("/"); 
-                //OrderDTO = await OrderService.AddOrder(OrderDTO);
-
-                NavigationManager.NavigateTo("/");
                 await OrderService.AddOrder(orderDTO);
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                throw;
+                throw new Exception(ex.Message);
             }
         }
 
@@ -49,17 +47,9 @@ namespace OrdersOnline.Web.Pages
             StateHasChanged();
         }
 
-        public void RemoveOrderLine(int index)
+        public async Task RemoveOrderLine(int index)
         {
             OrderDTO.OrderLines.RemoveAt(index);
-        }
-
-        public async Task HandleValidSubmit()
-        {
-            //Logger.LogInformation("HandleValidSubmit called");
-
-            // Process the valid form
-            await Task.CompletedTask;
         }
     }
 }

@@ -26,5 +26,29 @@ namespace OrdersOnline.Web.Pages
                 this.StateHasChanged();
             });
         }
+
+        public async Task<List<OrderDTO>> GetOrderList()
+        {
+            return Orders;
+        }
+
+        public async Task UpdateOrderList(OrderDTO order)
+        {
+            await InvokeAsync(() => {
+
+                if (order != null) { 
+
+                Orders.Add(order);
+                this.StateHasChanged();
+
+                }
+
+            });
+        }
+
+        public OrderBase Get()
+        {
+            return this;
+        }
     }
 }
